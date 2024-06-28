@@ -4,4 +4,13 @@
 <h1>
     Projects
 </h1>
+
+<ul>
+    {% for project in projects %}
+    <li>
+        <a href="{% url 'project' project.id %}">{{project.title}} </a>- {{project.vote_total}} ({{project.vote_ratio}}%)
+    </li>
+    {% endfor %}
+</ul>
+
 {% endblock content %}

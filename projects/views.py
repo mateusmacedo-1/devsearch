@@ -1,13 +1,17 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Project
 # Create your views here.
 
 def projects(request):
-    print(request)
-    return render(request, 'projects/multiple-projects.html')
+    projects = Project.objects.all()
+    context = {
+        'projects': projects
+    }
+    return render(request, 'projects/multiple-projects.html', context)
 
 def project(request, pk):
+    project = Project.objects.get(pk=pk)
     context = {
-        'pk': str(pk)
+        'project': project
     }
     return render(request, 'projects/single-project.html', context)
