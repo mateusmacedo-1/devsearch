@@ -40,3 +40,11 @@ def edit_project(request, pk):
             return redirect('projects:all')
     context = {'form': form}
     return render(request, 'projects/form.html', context)
+
+def delete_project(request, pk):
+    project = Project.objects.get(pk=pk)
+    context = {'project': project}
+    if request.method == 'POST':
+        project.delete()
+        return redirect('projects:all')
+    return render(request, 'projects/delete.html', context)
