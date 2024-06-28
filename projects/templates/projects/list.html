@@ -9,6 +9,7 @@
     {% for project in projects %}
     <li>
         <a href="{% url 'projects:get' project.id %}">{{project.title}} </a>- {{project.vote_total}} ({{project.vote_ratio}}%)
+        <a href="{% url 'projects:edit' project.id %}">Editar</a>
     </li>
     {% endfor %}
 </ul>

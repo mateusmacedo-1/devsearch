@@ -29,3 +29,14 @@ def create_project(request):
     
     context = {'form': form}
     return render(request, 'projects/form.html', context)
+
+def edit_project(request, pk):
+    project = Project.objects.get(pk=pk)
+    form = ProjectForm(instance=project)
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+            return redirect('projects:all')
+    context = {'form': form}
+    return render(request, 'projects/form.html', context)
