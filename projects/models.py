@@ -9,6 +9,7 @@ class Project(models.Model):
     tags = models.ManyToManyField('Tag', blank=True)
     vote_total = models.IntegerField(default=0, blank=True)
     vote_ratio = models.IntegerField(default=0, blank=True)
+    featured_image = models.ImageField(null=True, blank=True, default="projects/default.jpg", upload_to="projects")
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
