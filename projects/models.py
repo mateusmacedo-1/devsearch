@@ -6,7 +6,7 @@ class Project(models.Model):
     description = models.TextField(null=True, blank=True)
     demo_link = models.CharField(max_length=2000, null=True, blank=True)
     source_link = models.CharField(max_length=2000, null=True, blank=True)
-    tags = models.ManyToManyField('Tag', null=True, blank=True)
+    tags = models.ManyToManyField('Tag', blank=True)
     vote_total = models.IntegerField(default=0, blank=True)
     vote_ratio = models.IntegerField(default=0, blank=True)
     created = models.DateTimeField(auto_now_add=True)
