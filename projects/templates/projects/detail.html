@@ -5,8 +5,12 @@
     {{project.title}} 
     <span>{{project.votes_total|default:"0"}} votes </span>
     (<span style="color: green">{{project.votes_ratio|default:"-"}}%</span>)
-
 </h1>
+<p>
+    {% for tag in project.tags.all%}
+        <span style="border: 1em; background-color:gray; padding: .2em">{{tag}}</span>
+    {% endfor %}
+</p>
 <p>{{project.description}}</p>
 
 <h4>Reviews</h4>
