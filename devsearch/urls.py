@@ -24,5 +24,6 @@ from devsearch import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('projects/', include('projects.urls')),
+    path('profiles/', include('profiles.urls')),
     path('', RedirectView.as_view(url='projects/')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
