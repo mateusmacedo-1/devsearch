@@ -1,3 +1,4 @@
+import os
 from django.db import models
 import uuid
 # Create your models here.
@@ -15,6 +16,11 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+    def image_exists(self):
+        if self.featured_image:
+            return os.path.isfile(self.featured_image.path)
+        return False
 
 class Review(models.Model):
     VOTE_TYPE = (
