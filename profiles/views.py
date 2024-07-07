@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from .models import Profile
-from projects.models import Tag
+from projects.models import Project, Tag
 
 def profiles(request):
     profiles = Profile.objects.all()
@@ -10,5 +10,6 @@ def profiles(request):
 
 def profile(request, pk):
     profile = Profile.objects.get(pk=pk)
-    context = {'profile': profile}
+    projects = Project.objects.filter(owner=pk)
+    context = {'profile': profile, 'projects': projects}
     return render(request, 'profiles/detail.html', context)
