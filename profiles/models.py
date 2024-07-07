@@ -1,6 +1,8 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
+
+from profiles.validators import ValidateMinLength
 # Create your models here.
 
 class Profile(models.Model):
@@ -26,9 +28,10 @@ class Profile(models.Model):
 class Skill(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    description = models.TextField()
+    description = models.CharField(max_length=500, validators=[ValidateMinLength(200)])
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
         return self.name
+    
