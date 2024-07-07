@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
 from .models import Profile
+from projects.models import Tag
 
-# Create your views here.
 def profiles(request):
     profiles = Profile.objects.all()
     context = {'profiles': profiles}
