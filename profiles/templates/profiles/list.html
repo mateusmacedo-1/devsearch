@@ -8,7 +8,6 @@
           <h2>CONNECT WITH <span>DEVELOPERS</span></h2>
           <h2>FROM AROUND THE WORLD</h2>
         </div>
-
         <div class="hero-section__search">
           <form class="form" action="#" method="get">
             <div class="form__field">
@@ -29,7 +28,7 @@
         {% for profile in profiles %}
           <div class="column card">
             <div class="dev">
-              <a href="/profile.html" class="card__body">
+              <a href="{% url 'profiles:get' profile.id%}" class="card__body">
                 <div class="dev__profile">
                   <img class="avatar avatar--md" src="{{profile.profile_image.url}}" alt="image" />
                   <div class="dev__meta">
