@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 
+from django.contrib import messages
+
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
@@ -11,7 +13,7 @@ def login_view(request):
         username = request.POST["username"]
         password = request.POST["password"]
 
-        check_user_exists(username)
+        check_user_exists(username, request)
 
         user = authenticate(request, username=username, password=password)
         right_credentials = user is not None
@@ -20,7 +22,7 @@ def login_view(request):
             login(request, user)
             return redirect('projects:list')
         else:
-            print('Username or password incorrect.')
+            messages.error(request, 'Username or password incorrect.')
     
     return render(request, 'accounts/login.html')
 
@@ -31,8 +33,8 @@ def logout_view(request):
 def signup(request):
     return render(request, 'accounts/signup.html')
 
-def check_user_exists(username):
+def check_user_exists(username, request):
     try:
         User.objects.get(username=username)
     except:
-        print('User does not exists')
+        messages.error(request, 'User does not exists')
