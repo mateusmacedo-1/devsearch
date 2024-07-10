@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="Enter Username"/>
+    <input type="password" name="password" placeholder="Enter Password"/>
+    <input type="password" name="password" placeholder="Repeat Password"/>
+    <input type="submit" value="Enviar"/>
+    <a href="{% url 'accounts:login' %}">Já possui cadastro? Fazer login</a>
+</form>
+{% endblock content %}
