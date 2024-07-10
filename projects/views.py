@@ -19,13 +19,17 @@ def project(request, pk):
     return render(request, 'projects/detail.html', context)
 
 def create_project(request):
+    
+    if not request.user.is_authenticated:
+        return redirect('projects:list')
+    
     form = ProjectForm()
     
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('projects:all')
+            return redirect('projects:list')
     
     context = {'form': form}
     return render(request, 'projects/form.html', context)
@@ -37,7 +41,7 @@ def edit_project(request, pk):
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
             form.save()
-            return redirect('projects:all')
+            return redirect('projects:list')
     context = {'form': form}
     return render(request, 'projects/form.html', context)
 
@@ -46,5 +50,5 @@ def delete_project(request, pk):
     context = {'project': project}
     if request.method == 'POST':
         project.delete()
-        return redirect('projects:all')
+        return redirect('projects:list')
     return render(request, 'projects/delete.html', context)

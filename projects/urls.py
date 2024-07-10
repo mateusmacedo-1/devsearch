@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 app_name = "projects"
 urlpatterns = [
-    path('', views.projects, name='all'),
+    path('', views.projects, name='list'),
     path('<uuid:pk>', views.project, name='get'),
     path('create/', views.create_project, name='create'),
     path('<uuid:pk>/edit/', views.edit_project, name='edit'),

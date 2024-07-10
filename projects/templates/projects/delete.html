@@ -5,7 +5,7 @@
     {% csrf_token %}
     Are you shure you want to delete the project {{project.id}} - {{project.title}}?
     
-        <a href="{% url 'projects:all'%}">
+        <a href="{% url 'projects:list'%}">
             <button type="button">Go back</button>
         </a>
     <input type="submit" value="Confirm">
