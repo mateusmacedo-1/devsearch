@@ -4,6 +4,8 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
+
 # Create your views here.
 def login_view(request):
 
@@ -31,7 +33,15 @@ def logout_view(request):
     return redirect('accounts:login')
 
 def signup(request):
-    return render(request, 'accounts/signup.html')
+    form = UserCreationForm()
+    context = {'form': form}
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "User created.")
+            return redirect('projects:list')
+    return render(request, 'accounts/signup.html', context)
 
 def check_user_exists(username, request):
     try:
