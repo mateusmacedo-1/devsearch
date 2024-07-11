@@ -16,13 +16,12 @@ def login_view(request):
         username = request.POST["username"]
         password = request.POST["password"]
 
-        check_user_exists(username, request)
-
         user = authenticate(request, username=username, password=password)
         right_credentials = user is not None
         
         if right_credentials:
             login(request, user)
+            messages.success(request, 'User authenticated!')
             return redirect('projects:list')
         else:
             messages.error(request, 'Username or password incorrect.')
@@ -31,6 +30,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    messages.info(request, 'User logout')
     return redirect('accounts:login')
 
 def signup(request):
@@ -51,9 +51,3 @@ def signup(request):
     # renderiza no final, pois caso de erros, esse obj q tem os erros
     context = {'form': form}
     return render(request, 'accounts/signup.html', context)
-
-def check_user_exists(username, request):
-    try:
-        User.objects.get(username=username)
-    except:
-        messages.error(request, 'User does not exists')

@@ -21,6 +21,14 @@
 </head>
 <body>
     {% include 'navbar.html' %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert--{{message.tags}}">
+                <p class="alert__message">{{message}}</p>
+                <button class="alert__close" onclick="closeMessage()">x</button>
+            </div>
+        {% endfor %}
+    {% endif %}
 
     {% block content %}
     {% endblock content %}
@@ -28,4 +36,12 @@
     <p>Footer</p>
 
 </body>
+<script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+<script>
+    function closeMessage(){
+        document.querySelectorAll('.alert').forEach((el) => {
+            el.style.display = 'none'
+        })
+    }
+</script>
 </html>

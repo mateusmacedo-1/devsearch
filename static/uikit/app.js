@@ -6,9 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 let alertWrapper = document.querySelector('.alert')
 let alertClose = document.querySelector('.alert__close')
-
+console.log('aaaaaaaaaaaaaaaaa');
 if (alertWrapper) {
-  alertClose.addEventListener('click', () =>
+  console.log('Elemento alertWrapper encontrado');
+  alertClose.addEventListener('click', () => {
     alertWrapper.style.display = 'none'
+    console.log('fechandooooo');
+    }
   )
 }
