@@ -12,7 +12,8 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         profile = Profile.objects.create(
             user=instance,
-            username=instance.username
+            username=instance.username,
+            name = instance.first_name
         )
 
 @receiver(post_delete, sender=Profile)
