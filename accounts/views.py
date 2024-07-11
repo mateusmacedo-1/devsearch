@@ -35,7 +35,7 @@ def logout_view(request):
 
 def signup(request):
     form = CustomUserCreationForm()
-    context = {'form': form}
+
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -45,6 +45,11 @@ def signup(request):
             messages.success(request, "User created.")
             login(request, user)
             return redirect('profiles:list')
+        else:
+            messages.error(
+                request, 'An error has occurred during registration')
+    # renderiza no final, pois caso de erros, esse obj q tem os erros
+    context = {'form': form}
     return render(request, 'accounts/signup.html', context)
 
 def check_user_exists(username, request):
