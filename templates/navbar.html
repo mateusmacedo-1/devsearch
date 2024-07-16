@@ -14,8 +14,7 @@
           <li class="header__menuItem"><a href="{% url 'profiles:list' %}"> Developers</a></li>
           <li class="header__menuItem"><a href="{% url 'projects:list' %}" >Projects</a></li>          
           {% if request.user.is_authenticated %}
-            <li class="header__menuItem"><a href="{% url 'projects:create' %}">Create project</a></li>
-            <li class="header__menuItem"><a href="/">My Account</a></li>
+            <li class="header__menuItem"><a href="{% url 'profiles:personal' %}">Account</a></li>
             <li class="header__menuItem"><a href="{% url 'accounts:logout' %}" class="btn btn--sub">Logout</a></li>
           {% else %}
             <li class="header__menuItem"><a href="{% url 'accounts:login' %}" class="btn btn--sub">Login/Sign Up</a></li>

@@ -20,7 +20,7 @@ def project(request, pk):
     }
     return render(request, 'projects/detail.html', context)
 
-@login_required(login_url='projects:list')
+@login_required(login_url="accounts:login")
 def create_project(request):
     
     form = ProjectForm()
@@ -29,12 +29,12 @@ def create_project(request):
         form = ProjectForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('projects:list')
+            return redirect('profiles:personal')
     
     context = {'form': form}
     return render(request, 'projects/form.html', context)
 
-@login_required(login_url='projects:list')
+@login_required(login_url="accounts:login")
 def edit_project(request, pk):
     project = Project.objects.get(pk=pk)
     form = ProjectForm(instance=project)
@@ -46,7 +46,7 @@ def edit_project(request, pk):
     context = {'form': form}
     return render(request, 'projects/form.html', context)
 
-@login_required(login_url='projects:list')
+@login_required(login_url="accounts:login")
 def delete_project(request, pk):
     project = Project.objects.get(pk=pk)
     context = {'project': project}
