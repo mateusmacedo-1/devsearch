@@ -5,18 +5,10 @@
     <main class="formPage my-xl">
         <div class="content-box">
             <div class="formWrapper">
-                <a class="backButton" href="#"><i class="fa-solid fa-chevron-left"></i></a>
-                <br>
-
                 <form class="form" method="POST">
                     {% csrf_token %}
-                    {% for field in form%}
-                    <!-- Input:Text -->
-                    <div class="form__field">
-                        <label for="formInput#text">{{field.label}} </label>
-                        {{field}}
-                    </div>
-                    {% endfor %}
+                    <p> Are you sure you want to delete "{{object}}"?</p>
+                    <a href="{{request.GET.next}}">Cancel</a>
                     <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
                 </form>
             </div>
@@ -24,4 +16,3 @@
     </main>
 </body>
 {% endblock %}
-

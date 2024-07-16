@@ -24,11 +24,13 @@ def project(request, pk):
 def create_project(request):
     
     form = ProjectForm()
-    
+
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
-            form.save()
+            project = form.save(commit=False)
+            project.owner = request.user.profile
+            project.save()
             return redirect('profiles:personal')
     
     context = {'form': form}
@@ -36,7 +38,8 @@ def create_project(request):
 
 @login_required(login_url="accounts:login")
 def edit_project(request, pk):
-    project = Project.objects.get(pk=pk)
+    profile = request.user.profile
+    project = profile.project_set.get(pk=pk)
     form = ProjectForm(instance=project)
     if request.method == 'POST':
         form = ProjectForm(request.POST, instance=project)
@@ -48,9 +51,10 @@ def edit_project(request, pk):
 
 @login_required(login_url="accounts:login")
 def delete_project(request, pk):
-    project = Project.objects.get(pk=pk)
-    context = {'project': project}
+    profile = request.user.profile
+    project = profile.project_set.get(pk=pk)
+    context = {'object': project}
     if request.method == 'POST':
         project.delete()
         return redirect('projects:list')
-    return render(request, 'projects/delete.html', context)
+    return render(request, 'delete.html', context)
