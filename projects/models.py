@@ -25,6 +25,8 @@ class Project(models.Model):
         if self.featured_image:
             return os.path.isfile(self.featured_image.path)
         return False
+    class Meta:
+        ordering = ['created']
 
 class Review(models.Model):
     VOTE_TYPE = (
