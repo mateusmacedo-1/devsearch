@@ -1,15 +1,23 @@
 from django.shortcuts import redirect, render
 
+from django.db.models import Q
+
 from django.contrib.auth.decorators import login_required
 
 from profiles.forms import SkillForm
 
-from .models import Profile, Skill
-from projects.models import Project, Tag
+from .models import Profile
+from projects.models import Project
 
 def profiles(request):
-    profiles = Profile.objects.all()
-    context = {'profiles': profiles}
+    search_query = request.GET.get('search_query', '')
+    profiles = Profile.objects.filter(
+        Q(name__icontains=search_query) | 
+        Q(bio__icontains=search_query)  |
+        Q(short_intro__icontains=search_query) |
+        Q(skill__name__icontains=search_query)
+    )
+    context = {'profiles': profiles, 'search_query': search_query}
     return render(request, 'profiles/list.html', context)
 
 def profile(request, pk):
