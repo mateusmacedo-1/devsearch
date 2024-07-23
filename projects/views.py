@@ -23,10 +23,10 @@ def projects(request):
     paginator = Paginator(projects, page_len)
 
     page = get_page_param(request, 'page', 1, paginator.num_pages)
-    projects_page = paginator.page(page).object_list
+    projects_page = paginator.page(page)
         
     context = {
-        'projects': projects_page, 'search_query': search_query
+        'projects': projects_page, 'search_query': search_query, 'paginator': paginator
     }
 
     return render(request, 'projects/list.html', context)
