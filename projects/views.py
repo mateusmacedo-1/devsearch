@@ -1,10 +1,11 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from django.contrib.auth.decorators import login_required
 
 from django.core.paginator import Paginator
 from django.db.models import Q
-from projects.forms import ProjectForm
+from projects.forms import ProjectForm, ReviewForm
 from projects.utils import get_int_param, get_page_param
 from .models import Project
 # Create your views here.
@@ -33,8 +34,21 @@ def projects(request):
 
 def project(request, pk):
     project = Project.objects.get(pk=pk)
+    review_form = ReviewForm()
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST, owner=request.user.profile, project=project)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.project = project
+            if request.user.is_authenticated:
+                review.owner = request.user.profile
+            review.save()
+            messages.success(request, 'Review submitted successfully!')
+        else:
+            messages.error(request, 'There was an error with your submission.')
+
     context = {
-        'project': project
+        'project': project, 'review_form': review_form
     }
     return render(request, 'projects/detail.html', context)
 
