@@ -17,13 +17,18 @@ class ProjectForm(ModelForm):
 class ReviewForm(ModelForm):
     class Meta:
         model = Review
-        fields = ('body', 'value')
+        fields = ('value', 'body', )
+        labels = {
+            'body': 'Add a comment',
+            'value': 'Place your vote'
+        }
 
     def __init__(self, *args, **kwargs):
         self.owner = kwargs.pop('owner', None)
         self.project = kwargs.pop('project', None)
         super(ReviewForm, self).__init__(*args, **kwargs)
-        self.fields['body'].widget.attrs.update({'placeholder': f'Add Review', 'class': 'input'})
+        for v in self.fields.values():
+            v.widget.attrs.update({'class':'input'})
         
     def clean(self):
         cleaned_data = super(ReviewForm, self).clean()

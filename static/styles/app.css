@@ -233,10 +233,6 @@
     gap: 2rem;
   }
   
-  .hero-section__search > .form label {
-    position: absolute;
-    left: -9999px;
-  }
   
   .hero-section__search > .form input.input--text {
     width: 50rem;
@@ -535,10 +531,6 @@
     border-top: 2px solid var(--color-light);
   }
   
-  .comments .form label {
-    position: absolute;
-    margin: -9999px;
-  }
   
   .commentList {
     margin: 3rem 0;

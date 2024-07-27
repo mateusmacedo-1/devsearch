@@ -20,7 +20,7 @@ def projects(request):
         Q(description__icontains=search_query)  |
         Q(owner__name__icontains=search_query)  |
         Q(tags__name__icontains=search_query)
-    )
+    ).distinct()
     paginator = Paginator(projects, page_len)
 
     page = get_page_param(request, 'page', 1, paginator.num_pages)
@@ -44,6 +44,7 @@ def project(request, pk):
                 review.owner = request.user.profile
             review.save()
             messages.success(request, 'Review submitted successfully!')
+            return redirect('projects:get', pk=pk)
         else:
             messages.error(request, 'There was an error with your submission.')
 
