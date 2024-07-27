@@ -1,5 +1,5 @@
 {% extends 'main.html' %}
-
+{% load static %}
 {% block content %}
 <body>
     <!-- Main Section -->
@@ -30,7 +30,7 @@
           </div>
           <div class="column column--2of3">
             <img class="singleProject__preview" src="{% if project.image_exists %} {{project.featured_image.url}} {% else %} /media/projects/default.jpg {% endif %}" alt="portfolio thumbnail" />
-            <a href="profile.html" class="singleProject__developer">Md. Shahriar Parvez</a>
+            <a href="{% url 'profiles:get' project.owner.id %}" class="singleProject__developer">{{project.owner.name}}</a>
             <h2 class="singleProject__title">{{project.title}}</h2>
             <h3 class="singleProject__subtitle">{{project.description}}</h3>
             <div class="singleProject__info">
@@ -49,47 +49,55 @@
             <div class="comments">
               <h3 class="singleProject__subtitle">Feedback</h3>
               <h5 class="project--rating">
-                <span style="font-weight: bold;">{{ project.vote_ratio }}%</span> Postitive
+                <span style="font-weight: bold;">{{ project.vote_ratio }}%</span> Posititive
                         Feedback ({{ project.vote_total }} Vote{{ project.vote_total|pluralize }})
               </h5>
   
-              <form class="form" action="#" method="POST">
-                <!-- Textarea -->
-                <div class="form__field">
-                  <label for="formInput#textarea">Comments: </label>
-                  <textarea class="input input--textarea" name="message" id="formInput#textarea"
-                    placeholder="Write your comments here..."></textarea>
-                </div>
-                <input class="btn btn--sub btn--lg" type="submit" value="Comments" />
-              </form>
+
               <div class="commentList">
+                {% for review in project.review_set.all|dictsortreversed:"created" %}
                 <div class="comment">
-                  <a href="profile.html">
+                  {% if review.owner %}
+                  <a href="{% url 'profiles:get' review.owner.id %}">
                     <img class="avatar avatar--md"
-                      src="https://pbs.twimg.com/profile_images/1335382240931368961/b3wSZKj4_400x400.jpg" alt="user" />
+                      src="{{review.owner.profile_image.url}}" alt="user" />
                   </a>
+                  {% else %}
+                    <img class="avatar avatar--md"
+                        src="{% static 'images/user-default.png' %}" alt="user" />
+                  {% endif %}
                   <div class="comment__details">
-                    <a href="profile.html" class="comment__author">Sulamita Ivanov</a>
-                    <p class="comment__info">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit alias numquam perferendis
-                      mollitia minus minima exercitationem possimus ab deserunt qui, soluta iusto doloribus eveniet
-                      similique consequuntur ratione, dignissimos ut magni laborum quo.
+                    {% if review.owner %}
+                    <a href="{% url 'profiles:get' review.owner.id %}" class="comment__author">{{review.owner.name}}</a>
+                    {% else %}
+                    Anonymous
+                    {% endif %}
+                    <p style="font-size: 1.1em">
+                      {{review.body}}
                     </p>
+                    <p style="font-size: .9em">{{review.created|date:"d/m/Y à\s H:i:s"}}</p>
                   </div>
                 </div>
-                <div class="comment">
-                  <a href="profile.html">
-                    <img class="avatar avatar--md" src="https://avatars.githubusercontent.com/u/33843378" alt="user" />
-                  </a>
-                  <div class="comment__details">
-                    <a href="profile.html" class="comment__author">Dennis Ivanov</a>
-                    <p class="comment__info">
-                      Consectetur adipisicing elit. Reprehenderit alias numquam perferendis mollitia minus minima
-                      exercitationem possimus ab deserunt qui, ratione, dignissimos ut magni laborum quo.
-                    </p>
-                  </div>
-                </div>
+                {% endfor %}
               </div>
+              <form class="form" method="POST">
+                {% csrf_token %}
+                {% for field in review_form %}
+                <!-- Input:Text -->
+                <div class="form__field">
+                    <label for="formInput#text">{{ field.label }} </label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+                {% if review_form.non_field_errors %}
+                  {% for error in review_form.non_field_errors %}
+                    <div class="error-messages">
+                      <p style="color: red">{{error}}</p>
+                    </div>
+                  {% endfor %}
+                {% endif %}
+                <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+              </form>
             </div>
           </div>
         </div>
