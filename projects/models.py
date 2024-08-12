@@ -26,14 +26,21 @@ class Project(models.Model):
             return os.path.isfile(self.featured_image.path)
         return False
     
-    def vote_count(self):
-        reviews = self.review_set.all()
-        up_votes = reviews.filter(value='up').count()
-        total_votes = reviews.count()
-        ratio = (up_votes / total_votes) * 100
-        self.vote_total = total_votes
-        self.vote_ratio = ratio
-        self.save()
+    @property
+    def up_votes(self):
+        return self.review_set.filter(value='up').count()
+    
+    @property
+    def total_votes(self):
+        return self.review_set.count()
+    
+    @property
+    def ratio(self):
+        if self.total_votes > 0:
+            ratio = (self.up_votes / self.total_votes) * 100
+            return int(ratio)
+        return 0
+
         
     class Meta:
         ordering = ['-vote_ratio', '-vote_total', 'title']
@@ -60,7 +67,10 @@ class Review(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.project.vote_count()
+        self.project.vote_total = self.project.total_votes
+        self.project.vote_ratio = self.project.ratio
+        self.project.save()
+
     
 
 class Tag(models.Model):

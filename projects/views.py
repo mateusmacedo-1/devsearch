@@ -8,7 +8,6 @@ from django.db.models import Q
 from projects.forms import ProjectForm, ReviewForm
 from projects.utils import get_int_param, get_page_param
 from .models import Project
-# Create your views here.
 
 def projects(request):
 
