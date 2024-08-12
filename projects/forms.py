@@ -34,4 +34,6 @@ class ReviewForm(ModelForm):
         cleaned_data = super(ReviewForm, self).clean()
         if Review.objects.filter(owner=self.owner, project=self.project).exists():
             raise forms.ValidationError('You have already reviewed this project.')
+        if self.owner.id == self.project.owner.id:
+            raise forms.ValidationError('You cannot review your own project.')
         return cleaned_data

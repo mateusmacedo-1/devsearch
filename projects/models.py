@@ -40,6 +40,10 @@ class Project(models.Model):
             ratio = (self.up_votes / self.total_votes) * 100
             return int(ratio)
         return 0
+    
+    @property
+    def reviewers_ids(self):
+        return self.review_set.all().values_list('owner__id', flat=True)
 
         
     class Meta:

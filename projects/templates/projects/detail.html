@@ -45,15 +45,13 @@
               ut similique! Iste soluta quae tempora alias assumenda? Nam nesciunt nihil enim tempore cum quo
               architecto?
             </div>
-  
+            {% if project.vote_total > 0 %}
             <div class="comments">
               <h3 class="singleProject__subtitle">Feedback</h3>
               <h5 class="project--rating">
                 <span style="font-weight: bold;">{{ project.vote_ratio }}%</span> Posititive
                         Feedback ({{ project.vote_total }} Vote{{ project.vote_total|pluralize }})
               </h5>
-  
-
               <div class="commentList">
                 {% for review in project.review_set.all|dictsortreversed:"created" %}
                 <div class="comment">
@@ -68,7 +66,10 @@
                   {% endif %}
                   <div class="comment__details">
                     {% if review.owner %}
-                    <a href="{% url 'profiles:get' review.owner.id %}" class="comment__author">{{review.owner.name}}</a>
+                    <a href="{% url 'profiles:get' review.owner.id %}" class="comment__author">
+                      {{review.owner.name}} {% if review.owner.user.id == user.id %} (You) {% endif %}
+                    
+                    </a>
                     {% else %}
                     Anonymous
                     {% endif %}
@@ -80,26 +81,37 @@
                 </div>
                 {% endfor %}
               </div>
-
-              <form class="form" method="POST">
-                {% csrf_token %}
-                {% for field in review_form %}
-                <!-- Input:Text -->
-                <div class="form__field">
-                  <label for="formInput#text">{{field.label}} </label>
-                    {{ field }}
-                </div>
-                {% endfor %}
-                {% if review_form.non_field_errors %}
-                  {% for error in review_form.non_field_errors %}
-                    <div class="error-messages">
-                      <p style="color: red">{{error}}</p>
-                    </div>
-                  {% endfor %}
-                {% endif %}
-                <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
-              </form>
             </div>
+            {% else %}
+            <div class="comments">
+              <h3 class="singleProject__subtitle">Feedback</h3>
+              <h5 class="project--rating">
+                This project don't have review yet.
+              </h5>
+            </div>
+            {% endif %}
+            {% if user.is_authenticated and project.owner and user.id != project.owner.user.id and user.profile.id not in project.reviewers_ids%}
+            <form class="form" method="POST">
+              {% csrf_token %}
+              {% for field in review_form %}
+              <!-- Input:Text -->
+              <div class="form__field">
+                <label for="formInput#text">{{field.label}} </label>
+                  {{ field }}
+              </div>
+              {% endfor %}
+              {% if review_form.non_field_errors %}
+                {% for error in review_form.non_field_errors %}
+                  <div class="error-messages">
+                    <p style="color: red">{{error}}</p>
+                  </div>
+                {% endfor %}
+              {% endif %}
+              <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+            </form>
+            {% elif user.profile.id in project.reviewers_ids %}
+              <p>You already reviewed this project.</p>
+            {% endif %}
           </div>
         </div>
       </div>
