@@ -25,8 +25,18 @@ class Project(models.Model):
         if self.featured_image:
             return os.path.isfile(self.featured_image.path)
         return False
+    
+    def vote_count(self):
+        reviews = self.review_set.all()
+        up_votes = reviews.filter(value='up').count()
+        total_votes = reviews.count()
+        ratio = (up_votes / total_votes) * 100
+        self.vote_total = total_votes
+        self.vote_ratio = ratio
+        self.save()
+        
     class Meta:
-        ordering = ['created']
+        ordering = ['-vote_ratio', '-vote_total', 'title']
 
 class Review(models.Model):
     VOTE_TYPE = (
@@ -47,6 +57,10 @@ class Review(models.Model):
         ]
     def __str__(self):
         return self.value
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.project.vote_count()
     
 
 class Tag(models.Model):
