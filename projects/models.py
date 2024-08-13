@@ -43,7 +43,8 @@ class Project(models.Model):
     
     @property
     def reviewers_ids(self):
-        return self.review_set.all().values_list('owner__id', flat=True)
+        reviews = self.review_set.all().values_list('owner__id', flat=True)
+        return [id for id in reviews if id is not None]
 
         
     class Meta:

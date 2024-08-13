@@ -13,7 +13,7 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('profiles:list')
     if request.method == "POST":
-        username = request.POST["username"]
+        username = request.POST["username"].lower()
         password = request.POST["password"]
 
         user = authenticate(request, username=username, password=password)
@@ -22,7 +22,7 @@ def login_view(request):
         if right_credentials:
             login(request, user)
             messages.success(request, 'User authenticated!')
-            return redirect('projects:list')
+            return redirect(request.GET['next'] if 'next' in request.GET else 'profiles:personal')
         else:
             messages.error(request, 'Username or password incorrect.')
     

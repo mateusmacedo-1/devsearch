@@ -68,10 +68,9 @@
                     {% if review.owner %}
                     <a href="{% url 'profiles:get' review.owner.id %}" class="comment__author">
                       {{review.owner.name}} {% if review.owner.user.id == user.id %} (You) {% endif %}
-                    
                     </a>
                     {% else %}
-                    Anonymous
+                    <strong>User deleted</strong>
                     {% endif %}
                     <p style="font-size: 1.1em">
                       {{review.body}}
@@ -90,27 +89,33 @@
               </h5>
             </div>
             {% endif %}
-            {% if user.is_authenticated and project.owner and user.id != project.owner.user.id and user.profile.id not in project.reviewers_ids%}
-            <form class="form" method="POST">
-              {% csrf_token %}
-              {% for field in review_form %}
-              <!-- Input:Text -->
-              <div class="form__field">
-                <label for="formInput#text">{{field.label}} </label>
-                  {{ field }}
-              </div>
-              {% endfor %}
-              {% if review_form.non_field_errors %}
-                {% for error in review_form.non_field_errors %}
-                  <div class="error-messages">
-                    <p style="color: red">{{error}}</p>
-                  </div>
-                {% endfor %}
-              {% endif %}
-              <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
-            </form>
-            {% elif user.profile.id in project.reviewers_ids %}
+
+            {% if user.profile.id in project.reviewers_ids %}
               <p>You already reviewed this project.</p>
+            {% elif user.id == project.owner.user.id %}
+              <p>You cannot review your own project.</p>
+            {% elif user.is_authenticated %}
+              <form class="form" method="POST">
+                {% csrf_token %}
+                {% for field in review_form %}
+                <!-- Input:Text -->
+                <div class="form__field">
+                  <label for="formInput#text">{{field.label}} </label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+                {% if review_form.non_field_errors %}
+                  {% for error in review_form.non_field_errors %}
+                    <div class="error-messages">
+                      <p style="color: red">{{error}}</p>
+                    </div>
+                  {% endfor %}
+                {% endif %}
+                <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+              </form>
+            {% else %}
+              <p>You need to <span><a href="{% url 'accounts:login' %}?next={{request.path}}">Login</a></span> to review a project </p>
+              
             {% endif %}
           </div>
         </div>
