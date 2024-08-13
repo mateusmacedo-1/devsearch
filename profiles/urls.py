@@ -11,7 +11,8 @@ skill_urlpatterns = [
 
 personal_urlpatterns = [
     path('', views.personal_profile, name='personal'),
-    path('skills/', include(skill_urlpatterns))
+    path('skills/', include(skill_urlpatterns)),
+    path('inbox/', views.inbox, name='inbox'),
 ]
 
 urlpatterns = [

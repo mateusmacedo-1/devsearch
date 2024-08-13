@@ -28,6 +28,15 @@ def profile(request, pk):
 
 
 @login_required(login_url="accounts:login")
+def inbox(request):
+    profile = request.user.profile
+    messages = profile.messages.all()
+    unread_messages_length = profile.messages.filter(is_read=False).count()
+    context = {'profile': profile, 'messages': messages, 'unread_messages_length': unread_messages_length}
+    return render(request, 'profiles/inbox.html', context)
+
+
+@login_required(login_url="accounts:login")
 def personal_profile(request):
     profile = request.user.profile
     projects = profile.project_set.all()
