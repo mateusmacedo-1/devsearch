@@ -32,8 +32,17 @@ def inbox(request):
     profile = request.user.profile
     messages = profile.messages.all()
     unread_messages_length = profile.messages.filter(is_read=False).count()
-    context = {'profile': profile, 'messages': messages, 'unread_messages_length': unread_messages_length}
+    context = {'profile': profile, 'inbox_messages': messages, 'unread_messages_length': unread_messages_length}
     return render(request, 'profiles/inbox.html', context)
+
+@login_required(login_url="accounts:login")
+def message(request, pk):
+    profile = request.user.profile
+    message = profile.messages.get(pk=pk)
+    message.is_read = True
+    message.save()
+    context = {'message': message}
+    return render(request, 'profiles/message.html', context)
 
 
 @login_required(login_url="accounts:login")
