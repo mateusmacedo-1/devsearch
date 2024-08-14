@@ -1,10 +1,12 @@
 from django.shortcuts import redirect, render
 
+from django.contrib import messages
+
 from django.db.models import Q
 
 from django.contrib.auth.decorators import login_required
 
-from profiles.forms import SkillForm
+from profiles.forms import MessageForm, SkillForm
 
 from .models import Profile
 from projects.models import Project
@@ -44,6 +46,21 @@ def message(request, pk):
     context = {'message': message}
     return render(request, 'profiles/message.html', context)
 
+def create_message(request, pk):
+    recipient = Profile.objects.get(pk=pk)
+    sender = request.user.profile if request.user.is_authenticated else None
+    form = MessageForm(recipient=recipient, sender=sender)
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST, sender=sender, recipient=recipient)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user.profile
+            message.save()
+            return redirect('profiles:get', pk=pk)
+    
+    context = {'form': form, 'recipient': recipient, 'sender': sender}
+    return render(request, 'profiles/message-form.html', context)
 
 @login_required(login_url="accounts:login")
 def personal_profile(request):

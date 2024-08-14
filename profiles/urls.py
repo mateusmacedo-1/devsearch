@@ -14,11 +14,13 @@ personal_urlpatterns = [
     path('skills/', include(skill_urlpatterns)),
     path('inbox/', views.inbox, name='inbox'),
     path('inbox/<uuid:pk>', views.message, name='message'),
+    path('inbox/create/', views.create_message, name='create-message'),
 ]
 
 urlpatterns = [
     path('', views.profiles, name='list'),
     path('<uuid:pk>/', views.profile, name='get'),
+    path('<uuid:pk>/message', views.create_message, name='create-message'),
     path('personal/', include(personal_urlpatterns)),
     
 ]

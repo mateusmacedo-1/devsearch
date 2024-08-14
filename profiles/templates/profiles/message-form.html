@@ -1,0 +1,33 @@
+{% extends 'main.html'%}
+
+{% block content %}
+<body>
+    <!-- Main Section -->
+    <main class="formPage my-xl">
+        
+        <div class="content-box">
+            <p>sending message to... {{recipient.name}} {{recipient}}</p>
+            <div class="formWrapper">
+                <a class="backButton" onclick="history.back()" href="#"><i class="fa-solid fa-chevron-left"></i></a>
+                <br>
+
+                <form class="form" method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <!-- Input:Text -->
+                    <div class="form__field">
+                        <label for="formInput#text">{{ field.label }} </label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+                </form>
+
+                {% if form.errors %}
+                    {{ form.errors }}
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</body>
+{% endblock content %}
