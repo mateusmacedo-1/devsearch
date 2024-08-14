@@ -18,7 +18,7 @@ def profiles(request):
         Q(bio__icontains=search_query)  |
         Q(short_intro__icontains=search_query) |
         Q(skill__name__icontains=search_query)
-    )
+    ).distinct()
     context = {'profiles': profiles, 'search_query': search_query}
     return render(request, 'profiles/list.html', context)
 
