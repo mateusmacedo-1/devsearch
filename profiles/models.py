@@ -57,6 +57,9 @@ class Message(models.Model):
     
     class Meta:
         ordering = ['is_read', '-created']
+        constraints = [
+            models.CheckConstraint(check=~models.Q(sender=models.F('recipient')), name='sender_not_recipient')
+        ]
 
 
 
