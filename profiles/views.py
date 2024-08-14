@@ -46,18 +46,20 @@ def message(request, pk):
     context = {'message': message}
     return render(request, 'profiles/message.html', context)
 
-def create_message(request, pk):
-    recipient = Profile.objects.get(pk=pk)
+def create_message(request):
+    recipient_id = request.GET.get('recipient', '')
+    recipient = Profile.objects.get(pk=recipient_id) if recipient_id else None
     sender = request.user.profile if request.user.is_authenticated else None
     form = MessageForm(recipient=recipient, sender=sender)
 
     if request.method == 'POST':
         form = MessageForm(request.POST, sender=sender, recipient=recipient)
         if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = request.user.profile
-            message.save()
-            return redirect('profiles:get', pk=pk)
+            form.save()
+            messages.success(request, 'Mensagem enviada com sucesso!')
+            return redirect('profiles:get', pk=recipient.id if recipient else sender.id)
+        else:
+            messages.error(request, 'Erro ao enviar mensagem.')
     
     context = {'form': form, 'recipient': recipient, 'sender': sender}
     return render(request, 'profiles/message-form.html', context)

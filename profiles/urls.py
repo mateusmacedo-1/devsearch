@@ -20,7 +20,6 @@ personal_urlpatterns = [
 urlpatterns = [
     path('', views.profiles, name='list'),
     path('<uuid:pk>/', views.profile, name='get'),
-    path('<uuid:pk>/message', views.create_message, name='create-message'),
     path('personal/', include(personal_urlpatterns)),
     
 ]

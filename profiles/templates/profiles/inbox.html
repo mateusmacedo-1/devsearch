@@ -5,7 +5,10 @@
 <!-- Main Section -->
 <main class="inbox my-xl">
   <div class="content-box">
-    <h3 class="inbox__title">New Messages(<span>{{unread_messages_length}}</span>)</h3>
+    <div style="display: flex; justify-content: space-between">
+      <h3 class="inbox__title">New Messages(<span>{{unread_messages_length}}</span>)</h3>
+      <a href="{% url 'profiles:create-message' %}">Enviar mensagem</a>
+    </div>
     <ul class="messages">
       {% for m in inbox_messages%}
       <li class="message {% if not m.is_read%}message--unread{% endif %}">

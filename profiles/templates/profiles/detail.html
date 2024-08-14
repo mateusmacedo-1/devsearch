@@ -39,7 +39,7 @@
                 {% endif %}
 
               </ul>
-              <a href="{% url 'profiles:create-message' profile.id %}" class="btn btn--sub btn--lg">Send Message </a>
+              <a href="{% url 'profiles:create-message'%}?recipient={{profile.id}}" class="btn btn--sub btn--lg">Send Message </a>
             </div>
           </div>
         </div>
