@@ -45,16 +45,17 @@
               ut similique! Iste soluta quae tempora alias assumenda? Nam nesciunt nihil enim tempore cum quo
               architecto?
             </div>
-            {% if project.vote_total > 0 %}
-            <div class="comments">
+            
+            <div class="comments" data-testid="comments">
+              {% if project.vote_total > 0 %}
               <h3 class="singleProject__subtitle">Feedback</h3>
               <h5 class="project--rating">
                 <span style="font-weight: bold;">{{ project.vote_ratio }}%</span> Posititive
                         Feedback ({{ project.vote_total }} Vote{{ project.vote_total|pluralize }})
               </h5>
-              <div class="commentList">
+              <div class="commentList" data-testid="comment-list">
                 {% for review in project.review_set.all|dictsortreversed:"created" %}
-                <div class="comment">
+                <div class="comment" data-testid="comment">
                   {% if review.owner %}
                   <a href="{% url 'profiles:get' review.owner.id %}">
                     <img class="avatar avatar--md"
@@ -80,22 +81,21 @@
                 </div>
                 {% endfor %}
               </div>
+              {% else %}
+                <h3 class="singleProject__subtitle">Feedback</h3>
+                <h5 class="project--rating">
+                  This project don't have review yet.
+                </h5>
+              {% endif %}
             </div>
-            {% else %}
-            <div class="comments">
-              <h3 class="singleProject__subtitle">Feedback</h3>
-              <h5 class="project--rating">
-                This project don't have review yet.
-              </h5>
-            </div>
-            {% endif %}
+
 
             {% if user.profile.id in project.reviewers_ids %}
               <p>You already reviewed this project.</p>
             {% elif user.id == project.owner.user.id %}
               <p>You cannot review your own project.</p>
             {% elif user.is_authenticated %}
-              <form class="form" method="POST">
+              <form class="form" method="POST" data-testid="comment-form">
                 {% csrf_token %}
                 {% for field in review_form %}
                 <!-- Input:Text -->

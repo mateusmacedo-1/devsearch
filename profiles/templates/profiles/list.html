@@ -13,10 +13,10 @@
           <form class="form" method="get">
             <div class="form__field">
               <input class="input input--text" id="formInput#search" type="text" name="search_query"
-                value="{{search_query}}" placeholder="Search by developer" />
+                value="{{search_query}}" placeholder="Search by developer" data-testid="search-input"/>
             </div>
 
-            <input class="btn btn--sub btn--lg" type="submit" value="Search" />
+            <input class="btn btn--sub btn--lg" type="submit" value="Search" data-testid="search-button"/>
           </form>
         </div>
       </div>
@@ -24,10 +24,10 @@
     <!-- Search Result: DevList -->
     <section class="devlist">
       <div class="container">
-        <div class="grid grid--three">
+        <div class="grid grid--three" data-testid="profiles">
         {% for profile in profiles %}
           <div class="column card">
-            <div class="dev">
+            <div class="dev" data-testid="profile">
               <a href="{% url 'profiles:get' profile.id%}" class="card__body">
                 <div class="dev__profile">
                   <img class="avatar avatar--md" src="{{profile.profile_image.url}}" alt="image" />
@@ -39,9 +39,9 @@
                 <p class="dev__info">
                   {{profile.bio}}
                 </p>
-                <div class="dev__skills">
+                <div class="dev__skills" data-testid="tags">
                 {% for skill in profile.skill_set.all %}
-                  <span class="tag tag--pill tag--main">
+                  <span class="tag tag--pill tag--main" data-testid="tag">
                     <small>{{skill.name}}</small>
                   </span>
                 {% endfor %}
